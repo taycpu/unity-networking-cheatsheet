@@ -6,7 +6,11 @@
 <title>🎮 Multiplayer Architect — Skill Tree</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/protobuf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap');
 
@@ -18,7 +22,6 @@
     --red-alert: #ff4757;
     --bg-dark: #050a14;
     --bg-card: #0d1b2a;
-    --bg-card2: #0a1628;
     --border-glow: rgba(0, 212, 255, 0.3);
   }
 
@@ -32,7 +35,6 @@
     overflow-x: hidden;
   }
 
-  /* Animated starfield background */
   body::before {
     content: '';
     position: fixed;
@@ -44,26 +46,19 @@
       radial-gradient(1px 1px at 75% 60%, rgba(0,212,255,0.5) 0%, transparent 100%),
       radial-gradient(1px 1px at 90% 10%, rgba(255,215,0,0.4) 0%, transparent 100%),
       radial-gradient(1px 1px at 20% 80%, rgba(185,79,255,0.3) 0%, transparent 100%),
-      radial-gradient(1px 1px at 85% 85%, rgba(0,255,136,0.3) 0%, transparent 100%),
-      radial-gradient(1px 1px at 45% 70%, rgba(0,212,255,0.4) 0%, transparent 100%),
-      radial-gradient(1px 1px at 60% 90%, rgba(185,79,255,0.4) 0%, transparent 100%),
-      radial-gradient(1px 1px at 5% 55%, rgba(0,255,136,0.3) 0%, transparent 100%);
+      radial-gradient(1px 1px at 85% 85%, rgba(0,255,136,0.3) 0%, transparent 100%);
     pointer-events: none;
     z-index: 0;
   }
 
   .content-wrapper { position: relative; z-index: 1; }
-
-  /* Typography */
   .font-game { font-family: 'Orbitron', monospace; }
 
-  /* Neon text effects */
   .neon-purple { color: var(--neon-purple); text-shadow: 0 0 10px var(--neon-purple), 0 0 30px rgba(185,79,255,0.4); }
   .neon-blue   { color: var(--cyber-blue);  text-shadow: 0 0 10px var(--cyber-blue),  0 0 30px rgba(0,212,255,0.4); }
   .neon-green  { color: var(--emerald);     text-shadow: 0 0 10px var(--emerald),     0 0 30px rgba(0,255,136,0.4); }
   .neon-gold   { color: var(--gold);        text-shadow: 0 0 10px var(--gold),        0 0 30px rgba(255,215,0,0.4); }
 
-  /* Cards */
   .card {
     background: var(--bg-card);
     border: 1px solid var(--border-glow);
@@ -87,35 +82,28 @@
     box-shadow: 0 0 20px rgba(0,212,255,0.15), 0 4px 20px rgba(0,0,0,0.4);
     transform: translateY(-2px);
   }
-
   .card-purple { border-color: rgba(185,79,255,0.4); }
   .card-purple::before { background: linear-gradient(90deg, transparent, var(--neon-purple), transparent); }
-  .card-purple:hover { border-color: var(--neon-purple); box-shadow: 0 0 20px rgba(185,79,255,0.15); }
-
+  .card-purple:hover { border-color: var(--neon-purple); box-shadow: 0 0 20px rgba(185,79,255,0.15); transform: translateY(-2px); }
   .card-green { border-color: rgba(0,255,136,0.4); }
   .card-green::before { background: linear-gradient(90deg, transparent, var(--emerald), transparent); }
-  .card-green:hover { border-color: var(--emerald); box-shadow: 0 0 20px rgba(0,255,136,0.15); }
-
+  .card-green:hover { border-color: var(--emerald); box-shadow: 0 0 20px rgba(0,255,136,0.15); transform: translateY(-2px); }
   .card-gold { border-color: rgba(255,215,0,0.4); }
   .card-gold::before { background: linear-gradient(90deg, transparent, var(--gold), transparent); }
-  .card-gold:hover { border-color: var(--gold); box-shadow: 0 0 20px rgba(255,215,0,0.15); }
+  .card-gold:hover { border-color: var(--gold); box-shadow: 0 0 20px rgba(255,215,0,0.15); transform: translateY(-2px); }
 
-  /* Module headers */
   .module-header {
     padding: 1rem 1.5rem;
     border-radius: 10px 10px 0 0;
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    cursor: pointer;
-    user-select: none;
   }
   .module-header-blue   { background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(0,212,255,0.05)); border-bottom: 1px solid rgba(0,212,255,0.3); }
   .module-header-purple { background: linear-gradient(135deg, rgba(185,79,255,0.15), rgba(185,79,255,0.05)); border-bottom: 1px solid rgba(185,79,255,0.3); }
   .module-header-green  { background: linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,255,136,0.05)); border-bottom: 1px solid rgba(0,255,136,0.3); }
   .module-header-gold   { background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,215,0,0.05)); border-bottom: 1px solid rgba(255,215,0,0.3); }
 
-  /* Badge / pill */
   .badge {
     display: inline-block;
     padding: 2px 10px;
@@ -125,25 +113,36 @@
     font-family: 'Orbitron', monospace;
     letter-spacing: 0.05em;
   }
-  .badge-blue   { background: rgba(0,212,255,0.15);   color: var(--cyber-blue);  border: 1px solid rgba(0,212,255,0.4); }
-  .badge-purple { background: rgba(185,79,255,0.15);  color: var(--neon-purple); border: 1px solid rgba(185,79,255,0.4); }
-  .badge-green  { background: rgba(0,255,136,0.15);   color: var(--emerald);     border: 1px solid rgba(0,255,136,0.4); }
-  .badge-gold   { background: rgba(255,215,0,0.15);   color: var(--gold);        border: 1px solid rgba(255,215,0,0.4); }
-  .badge-red    { background: rgba(255,71,87,0.15);   color: var(--red-alert);   border: 1px solid rgba(255,71,87,0.4); }
+  .badge-blue   { background: rgba(0,212,255,0.15);  color: var(--cyber-blue);  border: 1px solid rgba(0,212,255,0.4); }
+  .badge-purple { background: rgba(185,79,255,0.15); color: var(--neon-purple); border: 1px solid rgba(185,79,255,0.4); }
+  .badge-green  { background: rgba(0,255,136,0.15);  color: var(--emerald);     border: 1px solid rgba(0,255,136,0.4); }
+  .badge-gold   { background: rgba(255,215,0,0.15);  color: var(--gold);        border: 1px solid rgba(255,215,0,0.4); }
+  .badge-red    { background: rgba(255,71,87,0.15);  color: var(--red-alert);   border: 1px solid rgba(255,71,87,0.4); }
 
-  /* Rarity colors */
-  .rarity-common   { color: #9ca3af; }
-  .rarity-rare     { color: var(--cyber-blue); }
-  .rarity-epic     { color: var(--neon-purple); }
-  .rarity-legendary{ color: var(--gold); }
+  .rarity-common    { color: #9ca3af; }
+  .rarity-rare      { color: var(--cyber-blue); }
+  .rarity-epic      { color: var(--neon-purple); }
+  .rarity-legendary { color: var(--gold); }
 
-  /* Details / summary */
+  /* Highlight.js override — match our dark theme */
+  .hljs {
+    background: #010d1a !important;
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 8px;
+    font-size: 0.8rem;
+    line-height: 1.65;
+    padding: 1rem 1.2rem !important;
+  }
+  pre { margin: 0; }
+  pre code.hljs { white-space: pre; }
+
   details > summary {
     cursor: pointer;
     list-style: none;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    padding: 0.4rem 0;
   }
   details > summary::-webkit-details-marker { display: none; }
   details > summary::before {
@@ -154,48 +153,26 @@
   }
   details[open] > summary::before { transform: rotate(90deg); }
 
-  /* Code blocks */
-  .code-block {
-    background: #020810;
+  /* Mermaid */
+  .diagram-wrap {
+    background: #010d1a;
     border: 1px solid rgba(0,212,255,0.2);
-    border-radius: 8px;
-    padding: 1rem;
-    font-family: 'Courier New', monospace;
-    font-size: 0.78rem;
-    line-height: 1.6;
-    overflow-x: auto;
-    color: #a8d8ea;
-  }
-  .code-keyword { color: var(--neon-purple); }
-  .code-type    { color: var(--cyber-blue); }
-  .code-string  { color: var(--emerald); }
-  .code-comment { color: #4a6b8a; font-style: italic; }
-  .code-num     { color: var(--gold); }
-
-  /* Mermaid container */
-  .mermaid-wrap {
-    background: rgba(0,0,0,0.4);
     border-radius: 10px;
     padding: 1.5rem;
     overflow-x: auto;
     cursor: zoom-in;
-    transition: transform 0.3s;
+    transition: transform 0.3s ease;
   }
-  .mermaid-wrap.zoomed {
-    transform: scale(1.5);
-    transform-origin: top left;
-    cursor: zoom-out;
-  }
-  .mermaid svg { max-width: 100%; }
+  .diagram-wrap.zoomed { transform: scale(1.6); transform-origin: top left; cursor: zoom-out; }
+  .diagram-wrap svg { display: block; margin: 0 auto; max-width: 100%; }
 
-  /* Skill node */
   .skill-node {
     border-radius: 10px;
     padding: 0.75rem 1rem;
     font-size: 0.82rem;
     font-weight: 500;
     text-align: center;
-    cursor: pointer;
+    cursor: default;
     transition: all 0.2s;
     border: 2px solid transparent;
   }
@@ -203,22 +180,10 @@
   .skill-node-purple { background: rgba(185,79,255,0.1); border-color: rgba(185,79,255,0.4); color: var(--neon-purple); }
   .skill-node-green  { background: rgba(0,255,136,0.1);  border-color: rgba(0,255,136,0.4);  color: var(--emerald); }
   .skill-node-gold   { background: rgba(255,215,0,0.1);  border-color: rgba(255,215,0,0.4);  color: var(--gold); }
-  .skill-node:hover  { transform: scale(1.05); filter: brightness(1.3); }
 
-  /* Progress bar */
-  .progress-bar {
-    height: 6px;
-    border-radius: 3px;
-    background: rgba(255,255,255,0.1);
-    overflow: hidden;
-  }
-  .progress-fill {
-    height: 100%;
-    border-radius: 3px;
-    transition: width 1s ease;
-  }
+  .progress-bar  { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.1); overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
 
-  /* Nav tabs */
   .nav-tab {
     padding: 0.5rem 1.25rem;
     border-radius: 8px;
@@ -229,47 +194,14 @@
     transition: all 0.2s;
     border: 1px solid transparent;
     color: #6b8a9a;
+    background: transparent;
   }
-  .nav-tab:hover { color: var(--cyber-blue); border-color: rgba(0,212,255,0.3); }
+  .nav-tab:hover  { color: var(--cyber-blue); border-color: rgba(0,212,255,0.3); }
   .nav-tab.active { color: var(--cyber-blue); border-color: var(--cyber-blue); background: rgba(0,212,255,0.1); }
 
-  /* Connector line */
-  .connector {
-    width: 2px;
-    height: 30px;
-    background: linear-gradient(to bottom, rgba(0,212,255,0.6), transparent);
-    margin: 0 auto;
-  }
-
-  /* Tooltip */
-  [data-tip] { position: relative; }
-  [data-tip]:hover::after {
-    content: attr(data-tip);
-    position: absolute;
-    bottom: 110%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--bg-card);
-    border: 1px solid var(--cyber-blue);
-    color: #c8d8e8;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 0.72rem;
-    white-space: nowrap;
-    z-index: 100;
-    pointer-events: none;
-  }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: var(--bg-dark); }
-  ::-webkit-scrollbar-thumb { background: rgba(0,212,255,0.4); border-radius: 3px; }
-
-  /* Section panel show/hide */
   .section-panel { display: none; }
   .section-panel.active { display: block; }
 
-  /* Comparison table */
   .compare-table { width: 100%; border-collapse: collapse; }
   .compare-table th {
     padding: 0.6rem 1rem;
@@ -287,7 +219,6 @@
   }
   .compare-table tr:hover td { background: rgba(0,212,255,0.04); }
 
-  /* Pulse animation */
   @keyframes pulse-glow {
     0%, 100% { box-shadow: 0 0 5px rgba(0,212,255,0.3); }
     50%       { box-shadow: 0 0 20px rgba(0,212,255,0.7), 0 0 40px rgba(0,212,255,0.3); }
@@ -299,19 +230,19 @@
     50%       { transform: translateY(-6px); }
   }
   .float { animation: float 3s ease-in-out infinite; }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg-dark); }
+  ::-webkit-scrollbar-thumb { background: rgba(0,212,255,0.4); border-radius: 3px; }
 </style>
 </head>
 <body>
 <div class="content-wrapper max-w-6xl mx-auto px-4 py-8">
 
-  <!-- ═══════════════ HEADER ═══════════════ -->
+  <!-- HEADER -->
   <div class="text-center mb-10">
-    <div class="float inline-block mb-4">
-      <div class="text-6xl">🌐</div>
-    </div>
-    <h1 class="font-game text-3xl md:text-4xl font-black neon-blue mb-2">
-      MULTIPLAYER ARCHITECT
-    </h1>
+    <div class="float inline-block mb-4"><div class="text-6xl">🌐</div></div>
+    <h1 class="font-game text-3xl md:text-4xl font-black neon-blue mb-2">MULTIPLAYER ARCHITECT</h1>
     <p class="font-game text-sm neon-purple tracking-widest mb-4">SKILL TREE — UNITY DEVELOPER ASCENSION PATH</p>
     <div class="flex flex-wrap justify-center gap-2 mb-6">
       <span class="badge badge-blue">TRANSPORT</span>
@@ -324,17 +255,17 @@
     </p>
   </div>
 
-  <!-- ═══════════════ MISSION BRIEF (3 cards) ═══════════════ -->
+  <!-- MISSION BRIEF -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
     <div class="card p-5 text-center">
       <div class="text-3xl mb-3">⚡</div>
       <h3 class="font-game text-xs neon-blue mb-2">YOUR ORIGIN CLASS</h3>
-      <p class="text-xs text-gray-400">Lead Unity Dev with HTTP mastery. You know request-response. Now you're leveling into <span class="text-cyan-300">real-time bidirectional</span> communication.</p>
+      <p class="text-xs text-gray-400">Lead Unity Dev with HTTP mastery. You know request-response. Now leveling into <span class="text-cyan-300">real-time bidirectional</span> comms.</p>
     </div>
     <div class="card card-purple p-5 text-center pulse">
       <div class="text-3xl mb-3">🎯</div>
       <h3 class="font-game text-xs neon-purple mb-2">THE FINAL BOSS</h3>
-      <p class="text-xs text-gray-400">Design a scalable backend that handles 10,000+ concurrent players using microservices, gRPC, Protobufs, and the right transport for each job.</p>
+      <p class="text-xs text-gray-400">Design a scalable backend handling 10,000+ concurrent players via microservices, gRPC, Protobufs, and the right transport for each job.</p>
     </div>
     <div class="card card-green p-5 text-center">
       <div class="text-3xl mb-3">🗺️</div>
@@ -343,59 +274,48 @@
     </div>
   </div>
 
-  <!-- ═══════════════ NAVIGATION ═══════════════ -->
-  <div class="flex flex-wrap justify-center gap-2 mb-8" id="nav-tabs">
-    <button class="nav-tab active" onclick="showSection('transport', this)">⚡ Module 1: Transport</button>
-    <button class="nav-tab" onclick="showSection('serialization', this)">📦 Module 2: Protobufs</button>
-    <button class="nav-tab" onclick="showSection('communication', this)">🔄 Module 3: Patterns</button>
-    <button class="nav-tab" onclick="showSection('architecture', this)">🏗️ Module 4: Microservices</button>
-    <button class="nav-tab" onclick="showSection('techtree', this)">🌳 Tech Tree</button>
-    <button class="nav-tab" onclick="showSection('loot', this)">💎 Loot Table</button>
-    <button class="nav-tab" onclick="showSection('oracle', this)">🔮 Oracle</button>
+  <!-- NAV -->
+  <div class="flex flex-wrap justify-center gap-2 mb-8">
+    <button class="nav-tab active" onclick="showSection('transport',this)">⚡ Module 1: Transport</button>
+    <button class="nav-tab" onclick="showSection('serialization',this)">📦 Module 2: Protobufs</button>
+    <button class="nav-tab" onclick="showSection('communication',this)">🔄 Module 3: Patterns</button>
+    <button class="nav-tab" onclick="showSection('architecture',this)">🏗️ Module 4: Microservices</button>
+    <button class="nav-tab" onclick="showSection('techtree',this)">🌳 Tech Tree</button>
+    <button class="nav-tab" onclick="showSection('loot',this)">💎 Loot Table</button>
+    <button class="nav-tab" onclick="showSection('oracle',this)">🔮 Oracle</button>
   </div>
 
-  <!-- ═══════════════ MODULE 1: TRANSPORT ═══════════════ -->
+  <!-- ══════════════════════════════════════════════
+       MODULE 1: TRANSPORT
+  ══════════════════════════════════════════════ -->
   <div id="section-transport" class="section-panel active">
     <div class="card mb-6">
       <div class="module-header module-header-blue">
         <span class="text-2xl">⚡</span>
         <div>
-          <h2 class="font-game text-lg neon-blue">MODULE 1: TRANSPORT & PROTOCOLS</h2>
+          <h2 class="font-game text-lg neon-blue">MODULE 1: TRANSPORT &amp; PROTOCOLS</h2>
           <p class="text-xs text-gray-400">Dungeon Level: Apprentice → Journeyman</p>
         </div>
         <span class="badge badge-blue ml-auto">ZONE 1</span>
       </div>
       <div class="p-6 space-y-6">
 
-        <!-- Overview -->
         <div>
           <h3 class="font-game text-xs neon-blue mb-3">◈ CONCEPTUAL OVERVIEW</h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
-            <div class="skill-node skill-node-blue" data-tip="Request → Wait → Response. You know this.">
-              🌐 HTTP/1.1<br><span class="text-xs opacity-70">Request-Response</span>
-            </div>
-            <div class="text-center text-2xl self-center text-gray-500">→</div>
-            <div class="skill-node skill-node-blue" data-tip="Full-duplex. Both sides talk anytime.">
-              🔌 WebSocket<br><span class="text-xs opacity-70">Persistent Duplex</span>
-            </div>
+          <div class="grid grid-cols-3 gap-3 mb-4 items-center">
+            <div class="skill-node skill-node-blue">🌐 HTTP/1.1<br><span class="text-xs opacity-70">Request-Response</span></div>
+            <div class="text-center text-2xl text-gray-500">→</div>
+            <div class="skill-node skill-node-blue">🔌 WebSocket<br><span class="text-xs opacity-70">Persistent Duplex</span></div>
           </div>
         </div>
 
-        <!-- Protocol Comparison Table -->
         <div>
           <h3 class="font-game text-xs neon-blue mb-3">◈ PROTOCOL BATTLE CHART</h3>
           <div class="overflow-x-auto">
             <table class="compare-table">
-              <thead>
-                <tr>
-                  <th class="neon-blue">Protocol</th>
-                  <th>Transport</th>
-                  <th>Latency</th>
-                  <th>Reliability</th>
-                  <th>Best For (Unity)</th>
-                  <th>Avoid When</th>
-                </tr>
-              </thead>
+              <thead><tr>
+                <th class="neon-blue">Protocol</th><th>Transport</th><th>Latency</th><th>Reliability</th><th>Best For (Unity)</th><th>Avoid When</th>
+              </tr></thead>
               <tbody>
                 <tr>
                   <td><span class="badge badge-green">TCP</span></td>
@@ -434,14 +354,12 @@
           </div>
         </div>
 
-        <!-- The head-of-line blocking problem -->
         <div class="card card-purple p-4">
           <h3 class="font-game text-xs neon-purple mb-2">⚠️ BOSS MECHANIC: Head-of-Line Blocking</h3>
           <p class="text-xs text-gray-300 mb-2">TCP guarantees order. If packet 4 is lost, packets 5–99 <strong class="text-yellow-300">sit and wait</strong>. For a 60Hz game loop, this is catastrophic.</p>
-          <p class="text-xs text-gray-400">UDP skips dropped packets. Your game code decides: "I don't need that old position update, I'll use the new one."</p>
+          <p class="text-xs text-gray-400">UDP skips dropped packets. Your game code decides: "I don't need that old position update — I'll use the new one."</p>
         </div>
 
-        <!-- Unity Architecture Example -->
         <div>
           <h3 class="font-game text-xs neon-blue mb-3">◈ UNITY → SERVER ARCHITECTURE EXAMPLE</h3>
           <p class="text-xs text-gray-400 mb-3">A hybrid transport design for an action game:</p>
@@ -449,78 +367,59 @@
             <div class="card card-purple p-4">
               <h4 class="font-game text-xs neon-purple mb-2">🎮 UNITY CLIENT</h4>
               <div class="space-y-2 text-xs">
-                <div class="flex items-center gap-2">
-                  <span class="badge badge-red">UDP</span>
-                  <span class="text-gray-300">→ Position / rotation / inputs (30–60Hz)</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span class="badge badge-blue">WebSocket</span>
-                  <span class="text-gray-300">→ Lobby, chat, events, matchmaking</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span class="badge badge-green">HTTPS</span>
-                  <span class="text-gray-300">→ Login, inventory, leaderboards</span>
-                </div>
+                <div class="flex items-center gap-2"><span class="badge badge-red">UDP</span><span class="text-gray-300">→ Position / rotation / inputs (30–60Hz)</span></div>
+                <div class="flex items-center gap-2"><span class="badge badge-blue">WebSocket</span><span class="text-gray-300">→ Lobby, chat, events, matchmaking</span></div>
+                <div class="flex items-center gap-2"><span class="badge badge-green">HTTPS</span><span class="text-gray-300">→ Login, inventory, leaderboards</span></div>
               </div>
             </div>
             <div class="card card-green p-4">
               <h4 class="font-game text-xs neon-green mb-2">🖥️ GAME SERVER</h4>
               <div class="space-y-2 text-xs">
-                <div class="flex items-center gap-2">
-                  <span class="badge badge-red">UDP :7777</span>
-                  <span class="text-gray-300">Netcode for GameObjects listener</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span class="badge badge-blue">WS :8080</span>
-                  <span class="text-gray-300">SignalR / raw WS hub</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span class="badge badge-green">gRPC :9090</span>
-                  <span class="text-gray-300">Service-to-service calls</span>
-                </div>
+                <div class="flex items-center gap-2"><span class="badge badge-red">UDP :7777</span><span class="text-gray-300">Netcode for GameObjects listener</span></div>
+                <div class="flex items-center gap-2"><span class="badge badge-blue">WS :8080</span><span class="text-gray-300">SignalR / raw WS hub</span></div>
+                <div class="flex items-center gap-2"><span class="badge badge-green">gRPC :9090</span><span class="text-gray-300">Service-to-service calls</span></div>
               </div>
             </div>
           </div>
 
           <details class="mt-3">
-            <summary class="text-xs text-gray-400 mb-2 font-medium">View: Unity C# UDP Send Example</summary>
-            <div class="code-block mt-3">
-<span class="code-comment">// Unity: raw UDP for position sync</span>
-<span class="code-keyword">using</span> <span class="code-type">System.Net.Sockets</span>;
-<span class="code-keyword">using</span> <span class="code-type">Google.Protobuf</span>;
+            <summary class="text-xs text-gray-400 font-medium">View: Unity C# UDP Send Example</summary>
+            <div class="mt-3">
+<pre><code class="language-csharp">// Unity: raw UDP for position sync
+using System.Net.Sockets;
+using Google.Protobuf;
 
-<span class="code-keyword">public class</span> <span class="code-type">UdpPositionSender</span> : MonoBehaviour {
-    <span class="code-keyword">private</span> <span class="code-type">UdpClient</span> udp;
-    <span class="code-keyword">private</span> <span class="code-type">IPEndPoint</span> server = <span class="code-keyword">new</span> <span class="code-type">IPEndPoint</span>(<span class="code-type">IPAddress</span>.Parse(<span class="code-string">"10.0.0.1"</span>), <span class="code-num">7777</span>);
+public class UdpPositionSender : MonoBehaviour {
+    private UdpClient udp = new UdpClient();
+    private IPEndPoint server = new IPEndPoint(IPAddress.Parse("10.0.0.1"), 7777);
 
-    <span class="code-keyword">void</span> FixedUpdate() {
-        <span class="code-comment">// Build protobuf message (see Module 2)</span>
-        <span class="code-keyword">var</span> msg = <span class="code-keyword">new</span> <span class="code-type">PlayerState</span> {
-            PlayerId = localPlayerId,
-            X = transform.position.x,
-            Y = transform.position.y,
-            Z = transform.position.z,
-            Timestamp = <span class="code-type">DateTimeOffset</span>.UtcNow.ToUnixTimeMilliseconds()
+    void FixedUpdate() {
+        // Build protobuf message (see Module 2)
+        var msg = new PlayerState {
+            PlayerId  = localPlayerId,
+            Position  = new Vec3 { X = transform.position.x,
+                                   Y = transform.position.y,
+                                   Z = transform.position.z },
+            Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
         };
-        <span class="code-keyword">byte</span>[] bytes = msg.ToByteArray(); <span class="code-comment">// ~30 bytes vs ~120 bytes JSON</span>
+        byte[] bytes = msg.ToByteArray(); // ~28 bytes vs ~200 bytes JSON
         udp.Send(bytes, bytes.Length, server);
     }
-}
+}</code></pre>
             </div>
           </details>
         </div>
 
-        <!-- WebSocket deep dive -->
         <div>
           <h3 class="font-game text-xs neon-blue mb-3">◈ WHEN TO USE WEBSOCKETS IN UNITY</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div class="card p-4">
               <h4 class="text-xs font-semibold text-green-400 mb-2">✓ USE WebSockets when:</h4>
               <ul class="text-xs text-gray-400 space-y-1">
-                <li>• Client is a WebGL build (no raw UDP)</li>
+                <li>• Client is a WebGL build (no raw UDP available)</li>
                 <li>• Events are infrequent (lobby state, scores)</li>
-                <li>• You're behind a corporate firewall/proxy</li>
-                <li>• Building a companion web/mobile app</li>
+                <li>• You're behind a corporate firewall / proxy</li>
+                <li>• Building a companion web or mobile app</li>
                 <li>• You need server → client push notifications</li>
               </ul>
             </div>
@@ -540,7 +439,9 @@
     </div>
   </div>
 
-  <!-- ═══════════════ MODULE 2: PROTOBUFS ═══════════════ -->
+  <!-- ══════════════════════════════════════════════
+       MODULE 2: PROTOBUFS
+  ══════════════════════════════════════════════ -->
   <div id="section-serialization" class="section-panel">
     <div class="card card-purple mb-6">
       <div class="module-header module-header-purple">
@@ -553,199 +454,152 @@
       </div>
       <div class="p-6 space-y-6">
 
-        <!-- Why Protobuf -->
         <div>
           <h3 class="font-game text-xs neon-purple mb-3">◈ WHY PROTOBUFS DESTROY JSON IN GAMES</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <h4 class="text-xs font-semibold text-red-400 mb-2">📄 JSON (what you know)</h4>
-              <div class="code-block text-xs">
-<span class="code-comment">// JSON PlayerState: ~220 bytes</span>
-{
-  <span class="code-string">"playerId"</span>: <span class="code-string">"abc-123-def"</span>,
-  <span class="code-string">"position"</span>: {
-    <span class="code-string">"x"</span>: <span class="code-num">123.456</span>,
-    <span class="code-string">"y"</span>: <span class="code-num">0.0</span>,
-    <span class="code-string">"z"</span>: <span class="code-num">-88.901</span>
-  },
-  <span class="code-string">"timestamp"</span>: <span class="code-num">1714393200000</span>,
-  <span class="code-string">"health"</span>: <span class="code-num">100</span>
-}
-              </div>
+              <h4 class="text-xs font-semibold text-red-400 mb-2">📄 JSON — what you know (~200 bytes)</h4>
+<pre><code class="language-json">{
+  "playerId": "abc-123-def",
+  "position": { "x": 123.456, "y": 0.0, "z": -88.901 },
+  "timestamp": 1714393200000,
+  "health": 100
+}</code></pre>
             </div>
             <div>
-              <h4 class="text-xs font-semibold text-green-400 mb-2">⚡ Protobuf (what you want)</h4>
-              <div class="code-block text-xs">
-<span class="code-comment">// Same data: ~28 bytes (8x smaller!)</span>
-<span class="code-comment">// Binary: field tags + varint encoding</span>
-<span class="code-num">0A 0B 61 62 63</span> ... <span class="code-comment">// player_id</span>
-<span class="code-num">15 79 E9 F6 42</span>     <span class="code-comment">// x = 123.456</span>
-<span class="code-num">1D 00 00 00 00</span>     <span class="code-comment">// y = 0.0</span>
-<span class="code-num">25 1B 2F B1 C2</span>     <span class="code-comment">// z = -88.901</span>
-<span class="code-num">28 C0 A8 A6 B2 06</span> <span class="code-comment">// timestamp</span>
-<span class="code-num">30 64</span>               <span class="code-comment">// health = 100</span>
-              </div>
+              <h4 class="text-xs font-semibold text-green-400 mb-2">⚡ Protobuf — what you want (~28 bytes)</h4>
+<pre><code class="language-plaintext">// Binary wire format — 8x smaller!
+// field tag + varint / fixed32 encoding
+0A 0B 61 62 63 ...  // player_id (string)
+15 79 E9 F6 42      // x = 123.456 (fixed32)
+1D 00 00 00 00      // y = 0.0
+25 1B 2F B1 C2      // z = -88.901
+28 C0 A8 A6 B2 06   // timestamp (varint)
+30 64               // health = 100</code></pre>
             </div>
           </div>
         </div>
 
-        <!-- Protobuf vs JSON comparison -->
         <div class="overflow-x-auto">
           <table class="compare-table">
-            <thead>
-              <tr>
-                <th class="neon-purple">Metric</th>
-                <th>JSON</th>
-                <th>Protobuf</th>
-                <th>Advantage</th>
-              </tr>
-            </thead>
+            <thead><tr>
+              <th class="neon-purple">Metric</th><th>JSON</th><th>Protobuf</th><th>Advantage</th>
+            </tr></thead>
             <tbody>
-              <tr>
-                <td class="text-gray-300">Payload size</td>
-                <td class="text-red-400">100%</td>
-                <td class="text-green-400">~12–30%</td>
-                <td><span class="badge badge-green">3–8x smaller</span></td>
-              </tr>
-              <tr>
-                <td class="text-gray-300">Parse speed</td>
-                <td class="text-red-400">Slow (text)</td>
-                <td class="text-green-400">Very fast (binary)</td>
-                <td><span class="badge badge-green">~5–10x faster</span></td>
-              </tr>
-              <tr>
-                <td class="text-gray-300">Schema</td>
-                <td class="text-yellow-400">Optional (loose)</td>
-                <td class="text-green-400">Required (.proto)</td>
-                <td><span class="badge badge-green">Enforced contracts</span></td>
-              </tr>
-              <tr>
-                <td class="text-gray-300">Readability</td>
-                <td class="text-green-400">Human-readable</td>
-                <td class="text-red-400">Binary (not readable)</td>
-                <td><span class="badge badge-red">JSON wins</span></td>
-              </tr>
-              <tr>
-                <td class="text-gray-300">Versioning</td>
-                <td class="text-yellow-400">Manual</td>
-                <td class="text-green-400">Field numbers → safe evolve</td>
-                <td><span class="badge badge-green">Backward-compat</span></td>
-              </tr>
+              <tr><td class="text-gray-300">Payload size</td><td class="text-red-400">100% (baseline)</td><td class="text-green-400">~12–30%</td><td><span class="badge badge-green">3–8x smaller</span></td></tr>
+              <tr><td class="text-gray-300">Parse speed</td><td class="text-red-400">Slow (text scan)</td><td class="text-green-400">Very fast (binary)</td><td><span class="badge badge-green">~5–10x faster</span></td></tr>
+              <tr><td class="text-gray-300">Schema</td><td class="text-yellow-400">Optional (loose)</td><td class="text-green-400">Required (.proto)</td><td><span class="badge badge-green">Enforced contracts</span></td></tr>
+              <tr><td class="text-gray-300">Readability</td><td class="text-green-400">Human-readable</td><td class="text-red-400">Binary</td><td><span class="badge badge-red">JSON wins</span></td></tr>
+              <tr><td class="text-gray-300">Versioning</td><td class="text-yellow-400">Manual</td><td class="text-green-400">Field numbers = safe evolution</td><td><span class="badge badge-green">Backward-compat</span></td></tr>
             </tbody>
           </table>
         </div>
 
-        <!-- Proto file example -->
         <div>
           <h3 class="font-game text-xs neon-purple mb-3">◈ YOUR FIRST .PROTO FILE</h3>
-          <div class="code-block">
-<span class="code-comment">// game.proto — shared between Unity client and Go/C# server</span>
-syntax = <span class="code-string">"proto3"</span>;
-<span class="code-keyword">package</span> game;
-<span class="code-keyword">option</span> csharp_namespace = <span class="code-string">"Game.Proto"</span>;
+<pre><code class="language-protobuf">// game.proto — shared between Unity client and Go/C# server
+syntax = "proto3";
+package game;
+option csharp_namespace = "Game.Proto";
 
-<span class="code-comment">// Field numbers are permanent! Never reuse a deleted number.</span>
-<span class="code-keyword">message</span> <span class="code-type">Vec3</span> {
-    <span class="code-keyword">float</span> x = <span class="code-num">1</span>;
-    <span class="code-keyword">float</span> y = <span class="code-num">2</span>;
-    <span class="code-keyword">float</span> z = <span class="code-num">3</span>;
+// Field numbers are PERMANENT. Never reuse a deleted number.
+message Vec3 {
+    float x = 1;
+    float y = 2;
+    float z = 3;
 }
 
-<span class="code-keyword">message</span> <span class="code-type">PlayerState</span> {
-    <span class="code-keyword">string</span> player_id = <span class="code-num">1</span>;
-    <span class="code-type">Vec3</span> position    = <span class="code-num">2</span>;
-    <span class="code-type">Vec3</span> rotation    = <span class="code-num">3</span>;
-    <span class="code-keyword">float</span> speed      = <span class="code-num">4</span>;
-    <span class="code-keyword">int32</span> health     = <span class="code-num">5</span>;
-    <span class="code-keyword">int64</span> timestamp  = <span class="code-num">6</span>;
-    <span class="code-comment">// Field 7 was "ammo", deleted. NEVER reuse field 7!</span>
-    <span class="code-keyword">reserved</span> <span class="code-num">7</span>; <span class="code-keyword">reserved</span> <span class="code-string">"ammo"</span>;
+message PlayerState {
+    string player_id = 1;
+    Vec3   position  = 2;
+    Vec3   rotation  = 3;
+    float  speed     = 4;
+    int32  health    = 5;
+    int64  timestamp = 6;
+    // Field 7 was "ammo" — deleted. NEVER reuse 7!
+    reserved 7; reserved "ammo";
 }
 
-<span class="code-keyword">message</span> <span class="code-type">GameSnapshot</span> {
-    <span class="code-keyword">repeated</span> <span class="code-type">PlayerState</span> players = <span class="code-num">1</span>; <span class="code-comment">// list of all players</span>
-    <span class="code-keyword">int64</span> server_tick = <span class="code-num">2</span>;
-}
-          </div>
+message GameSnapshot {
+    repeated PlayerState players = 1; // all players in frame
+    int64 server_tick = 2;
+}</code></pre>
         </div>
 
-        <!-- C# Integration -->
         <div>
           <h3 class="font-game text-xs neon-purple mb-3">◈ UNITY C# INTEGRATION WORKFLOW</h3>
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-2 mb-4">
-            <div class="skill-node skill-node-purple text-xs">
-              1️⃣ Write<br>.proto file
-            </div>
-            <div class="text-center self-center text-gray-500">→</div>
-            <div class="skill-node skill-node-purple text-xs">
-              2️⃣ Run<br>protoc compiler
-            </div>
-            <div class="text-center self-center text-gray-500">→</div>
-            <div class="skill-node skill-node-purple text-xs">
-              3️⃣ Gets<br>C# classes
-            </div>
-            <div class="text-center self-center text-gray-500">→</div>
-            <div class="skill-node skill-node-purple text-xs">
-              4️⃣ Use in<br>Unity scripts
-            </div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4 items-center">
+            <div class="skill-node skill-node-purple text-xs">1️⃣ Write<br>.proto file</div>
+            <div class="skill-node skill-node-purple text-xs">2️⃣ Run<br>protoc compiler</div>
+            <div class="skill-node skill-node-purple text-xs">3️⃣ Gets auto-generated<br>C# classes</div>
+            <div class="skill-node skill-node-purple text-xs">4️⃣ Use in<br>Unity scripts</div>
           </div>
 
           <details>
-            <summary class="text-xs text-gray-400 mb-2 font-medium">View: Setup commands (Terminal)</summary>
-            <div class="code-block mt-3 text-xs">
-<span class="code-comment"># Install protoc + C# plugin</span>
+            <summary class="text-xs text-gray-400 font-medium">View: Terminal setup commands</summary>
+            <div class="mt-3">
+<pre><code class="language-bash"># Install protoc + C# plugin
 brew install protobuf
 dotnet tool install -g protoc-gen-csharp
 
-<span class="code-comment"># Generate C# from .proto</span>
+# Generate C# from .proto
 protoc --csharp_out=./Assets/Proto \
        --proto_path=./Protos \
        game.proto
 
-<span class="code-comment"># Install NuGet package in Unity</span>
-<span class="code-comment"># Assets → Packages → Google.Protobuf 3.x</span>
+# Add NuGet to Unity via Package Manager
+# com.google.protobuf  (version 3.x)</code></pre>
             </div>
           </details>
 
-          <details class="mt-3">
-            <summary class="text-xs text-gray-400 mb-2 font-medium">View: Unity C# serialization example</summary>
-            <div class="code-block mt-3 text-xs">
-<span class="code-keyword">using</span> <span class="code-type">Game.Proto</span>;
-<span class="code-keyword">using</span> <span class="code-type">Google.Protobuf</span>;
+          <details class="mt-4">
+            <summary class="text-xs text-gray-400 font-medium">View: Unity C# serialize / deserialize</summary>
+            <div class="mt-3">
+<pre><code class="language-csharp">using Game.Proto;
+using Google.Protobuf;
 
-<span class="code-keyword">public class</span> <span class="code-type">StateSerializer</span> {
+public class StateSerializer {
 
-    <span class="code-comment">// SERIALIZE: C# object → binary bytes</span>
-    <span class="code-keyword">public static byte</span>[] Serialize(<span class="code-type">Transform</span> t, <span class="code-keyword">string</span> id) {
-        <span class="code-keyword">var</span> state = <span class="code-keyword">new</span> <span class="code-type">PlayerState</span> {
-            PlayerId  = id,
-            Position  = <span class="code-keyword">new</span> <span class="code-type">Vec3</span> { X = t.position.x, Y = t.position.y, Z = t.position.z },
-            Rotation  = <span class="code-keyword">new</span> <span class="code-type">Vec3</span> { X = t.eulerAngles.x, Y = t.eulerAngles.y, Z = t.eulerAngles.z },
-            Timestamp = <span class="code-type">DateTimeOffset</span>.UtcNow.ToUnixTimeMilliseconds()
+    // C# object → binary bytes (called every FixedUpdate)
+    public static byte[] Serialize(Transform t, string id) {
+        var state = new PlayerState {
+            PlayerId = id,
+            Position = new Vec3 {
+                X = t.position.x,
+                Y = t.position.y,
+                Z = t.position.z
+            },
+            Rotation = new Vec3 {
+                X = t.eulerAngles.x,
+                Y = t.eulerAngles.y,
+                Z = t.eulerAngles.z
+            },
+            Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
         };
-        <span class="code-keyword">return</span> state.ToByteArray(); <span class="code-comment">// ~28 bytes 🔥</span>
+        return state.ToByteArray(); // ~28 bytes 🔥
     }
 
-    <span class="code-comment">// DESERIALIZE: bytes → C# object</span>
-    <span class="code-keyword">public static</span> <span class="code-type">PlayerState</span> Deserialize(<span class="code-keyword">byte</span>[] data) {
-        <span class="code-keyword">return</span> <span class="code-type">PlayerState</span>.Parser.ParseFrom(data);
+    // bytes → C# object (called on receive)
+    public static PlayerState Deserialize(byte[] data) {
+        return PlayerState.Parser.ParseFrom(data);
     }
-}
+}</code></pre>
             </div>
           </details>
         </div>
 
-        <!-- Golden Rule -->
         <div class="card card-gold p-4">
           <h3 class="font-game text-xs neon-gold mb-2">🏆 LEGENDARY TIP: Field Number Rule</h3>
-          <p class="text-xs text-gray-300">Field numbers in Protobuf are <strong class="text-yellow-300">permanent wire identifiers</strong>. Once you ship with field 3 = "position", you can NEVER change that mapping. You can add new fields (field 8, 9…), but never reorder or delete without `reserved`. This is how Protobuf stays backward-compatible across server versions.</p>
+          <p class="text-xs text-gray-300">Field numbers are <strong class="text-yellow-300">permanent wire identifiers</strong>. Once you ship field 3 = "position", that mapping is forever. You can add new fields (8, 9…), but never reorder or delete without <code class="text-green-300">reserved</code>. This is how Protobuf stays backward-compatible when clients and servers are on different versions.</p>
         </div>
 
       </div>
     </div>
   </div>
 
-  <!-- ═══════════════ MODULE 3: COMMUNICATION PATTERNS ═══════════════ -->
+  <!-- ══════════════════════════════════════════════
+       MODULE 3: COMMUNICATION PATTERNS
+  ══════════════════════════════════════════════ -->
   <div id="section-communication" class="section-panel">
     <div class="card card-green mb-6">
       <div class="module-header module-header-green">
@@ -758,7 +612,6 @@ protoc --csharp_out=./Assets/Proto \
       </div>
       <div class="p-6 space-y-6">
 
-        <!-- 3 patterns overview -->
         <div>
           <h3 class="font-game text-xs neon-green mb-3">◈ THE THREE PATTERNS</h3>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -772,161 +625,98 @@ protoc --csharp_out=./Assets/Proto \
             <div class="card card-purple p-4">
               <div class="text-2xl mb-2">📡</div>
               <h4 class="font-game text-xs neon-purple mb-2">Pub/Sub</h4>
-              <p class="text-xs text-gray-400 mb-2">Publishers emit events. Subscribers react. No direct coupling.</p>
+              <p class="text-xs text-gray-400 mb-2">Publishers emit events. Subscribers react. Zero direct coupling.</p>
               <div class="badge badge-purple">Event-Driven</div>
-              <div class="mt-2 text-xs text-gray-500">player.killed → notify achievements, leaderboard, analytics</div>
+              <div class="mt-2 text-xs text-gray-500">player.killed → achievements + leaderboard + analytics</div>
             </div>
             <div class="card card-green p-4">
               <div class="text-2xl mb-2">⚡</div>
               <h4 class="font-game text-xs neon-green mb-2">RPC / gRPC</h4>
-              <p class="text-xs text-gray-400 mb-2">Call a function on a remote server as if it's local. Typed, fast.</p>
+              <p class="text-xs text-gray-400 mb-2">Call a function on a remote server as if it's local. Typed, fast, streaming.</p>
               <div class="badge badge-green">Remote Function Call</div>
               <div class="mt-2 text-xs text-gray-500">MatchmakingService.FindMatch(req)</div>
             </div>
           </div>
         </div>
 
-        <!-- When to use each -->
         <div class="overflow-x-auto">
           <h3 class="font-game text-xs neon-green mb-3">◈ PATTERN DECISION MATRIX</h3>
           <table class="compare-table">
-            <thead>
-              <tr>
-                <th class="neon-green">Scenario</th>
-                <th>REST</th>
-                <th>Pub/Sub</th>
-                <th>gRPC/RPC</th>
-                <th>Winner</th>
-              </tr>
-            </thead>
+            <thead><tr>
+              <th class="neon-green">Scenario</th><th>REST</th><th>Pub/Sub</th><th>gRPC/RPC</th><th>Winner</th>
+            </tr></thead>
             <tbody>
-              <tr>
-                <td class="text-gray-300">Player logs in</td>
-                <td class="text-green-400">✓ Perfect</td>
-                <td class="text-gray-500">—</td>
-                <td class="text-yellow-400">✓ OK</td>
-                <td><span class="badge badge-green">REST</span></td>
-              </tr>
-              <tr>
-                <td class="text-gray-300">Player kills enemy</td>
-                <td class="text-red-400">✗ Too slow</td>
-                <td class="text-green-400">✓ Perfect</td>
-                <td class="text-yellow-400">✓ OK</td>
-                <td><span class="badge badge-purple">Pub/Sub</span></td>
-              </tr>
-              <tr>
-                <td class="text-gray-300">Matchmaking request</td>
-                <td class="text-yellow-400">✓ OK</td>
-                <td class="text-red-400">✗ No response</td>
-                <td class="text-green-400">✓ Perfect</td>
-                <td><span class="badge badge-green">gRPC</span></td>
-              </tr>
-              <tr>
-                <td class="text-gray-300">Game state sync (60Hz)</td>
-                <td class="text-red-400">✗ Way too slow</td>
-                <td class="text-yellow-400">✓ Partial</td>
-                <td class="text-green-400">✓ gRPC stream</td>
-                <td><span class="badge badge-green">gRPC Stream</span></td>
-              </tr>
-              <tr>
-                <td class="text-gray-300">Item purchased → reward</td>
-                <td class="text-red-400">✗ Coupling</td>
-                <td class="text-green-400">✓ Perfect</td>
-                <td class="text-yellow-400">✓ OK</td>
-                <td><span class="badge badge-purple">Pub/Sub</span></td>
-              </tr>
-              <tr>
-                <td class="text-gray-300">Validate anti-cheat</td>
-                <td class="text-yellow-400">✓ OK</td>
-                <td class="text-red-400">✗ Async only</td>
-                <td class="text-green-400">✓ Perfect</td>
-                <td><span class="badge badge-green">gRPC</span></td>
-              </tr>
+              <tr><td class="text-gray-300">Player logs in</td><td class="text-green-400">✓ Perfect</td><td class="text-gray-500">—</td><td class="text-yellow-400">✓ OK</td><td><span class="badge badge-green">REST</span></td></tr>
+              <tr><td class="text-gray-300">Player kills enemy</td><td class="text-red-400">✗ Too slow</td><td class="text-green-400">✓ Perfect</td><td class="text-yellow-400">✓ OK</td><td><span class="badge badge-purple">Pub/Sub</span></td></tr>
+              <tr><td class="text-gray-300">Matchmaking request</td><td class="text-yellow-400">✓ OK</td><td class="text-red-400">✗ No response</td><td class="text-green-400">✓ Perfect</td><td><span class="badge badge-green">gRPC</span></td></tr>
+              <tr><td class="text-gray-300">Game state sync (60Hz)</td><td class="text-red-400">✗ Way too slow</td><td class="text-yellow-400">✓ Partial</td><td class="text-green-400">✓ gRPC stream</td><td><span class="badge badge-green">gRPC Stream</span></td></tr>
+              <tr><td class="text-gray-300">Item purchased → reward</td><td class="text-red-400">✗ Tight coupling</td><td class="text-green-400">✓ Perfect</td><td class="text-yellow-400">✓ OK</td><td><span class="badge badge-purple">Pub/Sub</span></td></tr>
+              <tr><td class="text-gray-300">Anti-cheat validation</td><td class="text-yellow-400">✓ OK</td><td class="text-red-400">✗ Async only</td><td class="text-green-400">✓ Perfect</td><td><span class="badge badge-green">gRPC</span></td></tr>
             </tbody>
           </table>
         </div>
 
-        <!-- gRPC Deep Dive -->
         <div>
-          <h3 class="font-game text-xs neon-green mb-3">◈ gRPC: THE MULTIPLAYER ARCHITECT'S SWISS ARMY KNIFE</h3>
+          <h3 class="font-game text-xs neon-green mb-3">◈ gRPC — THE MULTIPLAYER ARCHITECT'S SWISS ARMY KNIFE</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="space-y-2">
-              <p class="text-xs text-gray-300">gRPC = <strong class="text-cyan-300">Protobuf</strong> (serialization) + <strong class="text-purple-300">HTTP/2</strong> (transport) + <strong class="text-green-300">generated stubs</strong> (no manual parsing).</p>
-              <p class="text-xs text-gray-400">It gives you 4 call types:</p>
-              <div class="space-y-2">
-                <div class="card p-3">
-                  <span class="badge badge-green text-xs">Unary</span>
-                  <span class="text-xs text-gray-400 ml-2">One request → one response. Like REST.</span>
-                </div>
-                <div class="card p-3">
-                  <span class="badge badge-blue text-xs">Server Stream</span>
-                  <span class="text-xs text-gray-400 ml-2">One request → stream of responses. Game snapshots!</span>
-                </div>
-                <div class="card p-3">
-                  <span class="badge badge-purple text-xs">Client Stream</span>
-                  <span class="text-xs text-gray-400 ml-2">Stream of requests → one response. Upload replay data.</span>
-                </div>
-                <div class="card card-gold p-3">
-                  <span class="badge badge-gold text-xs">Bidi Stream</span>
-                  <span class="text-xs text-gray-400 ml-2">Full duplex streams both ways. Real-time game channel!</span>
-                </div>
-              </div>
+            <div class="space-y-3">
+              <p class="text-xs text-gray-300">gRPC = <strong class="text-cyan-300">Protobuf</strong> + <strong class="text-purple-300">HTTP/2</strong> + <strong class="text-green-300">generated stubs</strong>. Four call types:</p>
+              <div class="card p-3"><span class="badge badge-green text-xs">Unary</span><span class="text-xs text-gray-400 ml-2">One request → one response. Like REST.</span></div>
+              <div class="card p-3"><span class="badge badge-blue text-xs">Server Stream</span><span class="text-xs text-gray-400 ml-2">One request → stream of responses. Perfect for game snapshots.</span></div>
+              <div class="card p-3"><span class="badge badge-purple text-xs">Client Stream</span><span class="text-xs text-gray-400 ml-2">Stream of requests → one response. Upload replay data.</span></div>
+              <div class="card card-gold p-3"><span class="badge badge-gold text-xs">Bidi Stream</span><span class="text-xs text-gray-400 ml-2">Full duplex streams both ways — real-time game channel.</span></div>
             </div>
             <div>
               <details open>
-                <summary class="text-xs text-gray-400 mb-2 font-medium">View: .proto service definition</summary>
-                <div class="code-block mt-2 text-xs">
-<span class="code-comment">// matchmaking.proto</span>
-<span class="code-keyword">service</span> <span class="code-type">MatchmakingService</span> {
-    <span class="code-comment">// Unary: find a match</span>
-    rpc FindMatch (<span class="code-type">MatchRequest</span>)
-        returns (<span class="code-type">MatchResult</span>);
+                <summary class="text-xs text-gray-400 font-medium mb-2">View: .proto service definition</summary>
+<pre><code class="language-protobuf">// matchmaking.proto
+service MatchmakingService {
+    // Unary: find a match
+    rpc FindMatch (MatchRequest)
+        returns (MatchResult);
 
-    <span class="code-comment">// Server stream: receive game snapshots</span>
-    rpc SubscribeToGame (<span class="code-type">GameSubscribeRequest</span>)
-        returns (stream <span class="code-type">GameSnapshot</span>);
+    // Server stream: receive game snapshots
+    rpc SubscribeToGame (GameSubscribeRequest)
+        returns (stream GameSnapshot);
 
-    <span class="code-comment">// Bidi stream: full game channel</span>
-    rpc GameChannel (stream <span class="code-type">ClientInput</span>)
-        returns (stream <span class="code-type">GameSnapshot</span>);
-}
-                </div>
+    // Bidi stream: full real-time game channel
+    rpc GameChannel (stream ClientInput)
+        returns (stream GameSnapshot);
+}</code></pre>
               </details>
-              <details class="mt-3">
-                <summary class="text-xs text-gray-400 mb-2 font-medium">View: Unity C# gRPC client</summary>
-                <div class="code-block mt-2 text-xs">
-<span class="code-keyword">var</span> channel = <span class="code-type">GrpcChannel</span>.ForAddress(<span class="code-string">"https://server:9090"</span>);
-<span class="code-keyword">var</span> client  = <span class="code-keyword">new</span> <span class="code-type">MatchmakingService.MatchmakingServiceClient</span>(channel);
+              <details class="mt-4">
+                <summary class="text-xs text-gray-400 font-medium mb-2">View: Unity C# gRPC client</summary>
+<pre><code class="language-csharp">var channel = GrpcChannel.ForAddress("https://server:9090");
+var client  = new MatchmakingService.MatchmakingServiceClient(channel);
 
-<span class="code-comment">// Unary call</span>
-<span class="code-keyword">var</span> match = <span class="code-keyword">await</span> client.FindMatchAsync(<span class="code-keyword">new</span> <span class="code-type">MatchRequest</span> {
+// Unary call
+var match = await client.FindMatchAsync(new MatchRequest {
     PlayerId = localId, Rank = playerRank
 });
 
-<span class="code-comment">// Server-streaming: receive game snapshots</span>
-<span class="code-keyword">using var</span> stream = client.SubscribeToGame(
-    <span class="code-keyword">new</span> <span class="code-type">GameSubscribeRequest</span> { GameId = match.GameId });
-<span class="code-keyword">await foreach</span> (<span class="code-keyword">var</span> snapshot <span class="code-keyword">in</span> stream.ResponseStream.ReadAllAsync()) {
-    ApplyGameSnapshot(snapshot); <span class="code-comment">// update all players</span>
-}
-                </div>
+// Server-streaming: receive game snapshots
+using var stream = client.SubscribeToGame(
+    new GameSubscribeRequest { GameId = match.GameId });
+
+await foreach (var snapshot in stream.ResponseStream.ReadAllAsync()) {
+    ApplyGameSnapshot(snapshot); // update all remote players
+}</code></pre>
               </details>
             </div>
           </div>
         </div>
 
-        <!-- Pub/Sub for games -->
         <div>
           <h3 class="font-game text-xs neon-green mb-3">◈ PUB/SUB: EVENT BUS FOR GAME BACKENDS</h3>
-          <p class="text-xs text-gray-400 mb-3">Pub/Sub decouples your services. When "PlayerKilled" fires, multiple services react <strong class="text-green-300">independently</strong> — no service knows about the others.</p>
+          <p class="text-xs text-gray-400 mb-3">Decouples services. When "PlayerKilled" fires, multiple services react <strong class="text-green-300">independently</strong> — no service knows about the others.</p>
           <div class="card p-4">
-            <div class="text-xs text-gray-300 mb-3 font-medium">Event flow: player.killed</div>
-            <div class="flex flex-wrap gap-2 items-center text-xs">
-              <div class="skill-node skill-node-blue px-3 py-2">⚔️ Game Server<br><span class="opacity-60">publishes</span></div>
-              <div class="text-gray-500">→</div>
-              <div class="skill-node skill-node-purple px-3 py-2">📨 Message Broker<br><span class="opacity-60">Redis/NATS/Kafka</span></div>
-              <div class="text-gray-500">→</div>
-              <div class="grid grid-cols-1 gap-1">
+            <div class="text-xs font-medium text-gray-300 mb-3">Event flow: <code class="text-green-400">player.killed</code></div>
+            <div class="flex flex-wrap gap-3 items-center text-xs">
+              <div class="skill-node skill-node-blue px-3 py-2">⚔️ Game Server<br><span class="opacity-60">publishes event</span></div>
+              <div class="text-gray-500 text-lg">→</div>
+              <div class="skill-node skill-node-purple px-3 py-2">📨 Message Broker<br><span class="opacity-60">Redis / NATS / Kafka</span></div>
+              <div class="text-gray-500 text-lg">→</div>
+              <div class="flex flex-col gap-1">
                 <div class="skill-node skill-node-green px-2 py-1 text-xs">🏆 Leaderboard Service</div>
                 <div class="skill-node skill-node-gold px-2 py-1 text-xs">🎖️ Achievement Service</div>
                 <div class="skill-node skill-node-blue px-2 py-1 text-xs">📊 Analytics Service</div>
@@ -939,7 +729,9 @@ protoc --csharp_out=./Assets/Proto \
     </div>
   </div>
 
-  <!-- ═══════════════ MODULE 4: MICROSERVICES ═══════════════ -->
+  <!-- ══════════════════════════════════════════════
+       MODULE 4: MICROSERVICES
+  ══════════════════════════════════════════════ -->
   <div id="section-architecture" class="section-panel">
     <div class="card card-gold mb-6">
       <div class="module-header module-header-gold">
@@ -952,22 +744,19 @@ protoc --csharp_out=./Assets/Proto \
       </div>
       <div class="p-6 space-y-6">
 
-        <!-- What is microservices -->
         <div>
           <h3 class="font-game text-xs neon-gold mb-3">◈ MONOLITH vs MICROSERVICES</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="card p-4">
-              <h4 class="text-xs font-semibold text-red-400 mb-2">🏚️ Monolith (how most game backends start)</h4>
-              <div class="code-block text-xs mb-3">
-GameServer.exe {
+              <h4 class="text-xs font-semibold text-red-400 mb-2">🏚️ Monolith (where most games start)</h4>
+<pre><code class="language-plaintext">GameServer.exe {
   Matchmaking + Inventory +
   Leaderboard + Auth + Chat +
-  Anti-cheat + Analytics
+  AntiCheat + Analytics
 }
-<span class="code-comment">// One crash kills everything.</span>
-<span class="code-comment">// Scale matchmaking? Scale it ALL.</span>
-              </div>
-              <ul class="text-xs text-gray-400 space-y-1">
+// One crash kills everything.
+// Scale matchmaking = scale ALL of it.</code></pre>
+              <ul class="text-xs text-gray-400 space-y-1 mt-3">
                 <li>• OK for &lt;1,000 concurrent users</li>
                 <li>• Fast to start building</li>
                 <li>• Terrible to scale independently</li>
@@ -975,16 +764,14 @@ GameServer.exe {
             </div>
             <div class="card card-green p-4">
               <h4 class="text-xs font-semibold text-green-400 mb-2">🏙️ Microservices (where you're heading)</h4>
-              <div class="code-block text-xs mb-3">
-matchmaking-service  :9001
+<pre><code class="language-plaintext">matchmaking-service  :9001
 inventory-service    :9002
 leaderboard-service  :9003
 auth-service         :9004
 chat-service         :9005
-<span class="code-comment">// Each scales independently.</span>
-<span class="code-comment">// Chat down? Game still runs.</span>
-              </div>
-              <ul class="text-xs text-gray-400 space-y-1">
+// Each scales independently.
+// Chat goes down? Game still runs.</code></pre>
+              <ul class="text-xs text-gray-400 space-y-1 mt-3">
                 <li>• Scale each service independently</li>
                 <li>• Fault isolation (one crash ≠ game down)</li>
                 <li>• Deploy matchmaking without touching inventory</li>
@@ -993,14 +780,13 @@ chat-service         :9005
           </div>
         </div>
 
-        <!-- Game microservices breakdown -->
         <div>
           <h3 class="font-game text-xs neon-gold mb-3">◈ THE GAME BACKEND KINGDOM</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             <div class="card p-4">
               <div class="text-xl mb-2">🎯</div>
               <h4 class="font-game text-xs neon-blue mb-1">Matchmaking Service</h4>
-              <p class="text-xs text-gray-400 mb-2">Finds balanced games. CPU-heavy during peak. Uses skill-based matching (Glicko/ELO).</p>
+              <p class="text-xs text-gray-400 mb-2">CPU-heavy during peaks. Skill-based matching (Glicko/ELO). Runs queue workers.</p>
               <div class="progress-bar mb-1"><div class="progress-fill bg-cyan-400" style="width:85%"></div></div>
               <p class="text-xs text-gray-500">Scale trigger: queue depth &gt; 100</p>
               <div class="mt-2"><span class="badge badge-blue">gRPC unary</span></div>
@@ -1011,12 +797,12 @@ chat-service         :9005
               <p class="text-xs text-gray-400 mb-2">Reads: very frequent. Writes: rare. Cache aggressively in Redis.</p>
               <div class="progress-bar mb-1"><div class="progress-fill bg-purple-400" style="width:60%"></div></div>
               <p class="text-xs text-gray-500">Scale trigger: read latency &gt; 50ms</p>
-              <div class="mt-2"><span class="badge badge-blue">REST + Redis</span></div>
+              <div class="mt-2"><span class="badge badge-blue">REST + Redis cache</span></div>
             </div>
             <div class="card p-4">
               <div class="text-xl mb-2">🏆</div>
               <h4 class="font-game text-xs neon-gold mb-1">Leaderboard Service</h4>
-              <p class="text-xs text-gray-400 mb-2">Redis Sorted Sets = O(log N) rank queries. Rebuild from events, not DB polling.</p>
+              <p class="text-xs text-gray-400 mb-2">Redis Sorted Sets = O(log N) rank queries. Rebuilt from events, not DB polling.</p>
               <div class="progress-bar mb-1"><div class="progress-fill bg-yellow-400" style="width:70%"></div></div>
               <p class="text-xs text-gray-500">Scale trigger: write throughput &gt; 10k/s</p>
               <div class="mt-2"><span class="badge badge-purple">Pub/Sub consumer</span></div>
@@ -1024,7 +810,7 @@ chat-service         :9005
             <div class="card p-4">
               <div class="text-xl mb-2">🔐</div>
               <h4 class="font-game text-xs neon-green mb-1">Auth Service</h4>
-              <p class="text-xs text-gray-400 mb-2">Issues JWTs. Short-lived access tokens (15min) + long-lived refresh tokens. Stateless validation.</p>
+              <p class="text-xs text-gray-400 mb-2">Issues JWTs. Short-lived access tokens (15 min) + long refresh tokens. Stateless validation.</p>
               <div class="progress-bar mb-1"><div class="progress-fill bg-green-400" style="width:40%"></div></div>
               <p class="text-xs text-gray-500">Scale trigger: login RPS &gt; 500</p>
               <div class="mt-2"><span class="badge badge-green">REST + JWT</span></div>
@@ -1032,7 +818,7 @@ chat-service         :9005
             <div class="card p-4">
               <div class="text-xl mb-2">⚡</div>
               <h4 class="font-game text-xs neon-blue mb-1">Game Session Service</h4>
-              <p class="text-xs text-gray-400 mb-2">The hot path. Authoritative game loop. Manages player state, physics validation, anti-cheat.</p>
+              <p class="text-xs text-gray-400 mb-2">The hot path. Authoritative game loop. Player state, physics validation, anti-cheat.</p>
               <div class="progress-bar mb-1"><div class="progress-fill bg-cyan-400" style="width:95%"></div></div>
               <p class="text-xs text-gray-500">Scale trigger: sessions per instance &gt; 10</p>
               <div class="mt-2"><span class="badge badge-red">UDP + gRPC stream</span></div>
@@ -1040,7 +826,7 @@ chat-service         :9005
             <div class="card p-4">
               <div class="text-xl mb-2">💬</div>
               <h4 class="font-game text-xs neon-purple mb-1">Chat Service</h4>
-              <p class="text-xs text-gray-400 mb-2">WebSocket hub. Rooms map to game sessions. Persist to Cassandra for history.</p>
+              <p class="text-xs text-gray-400 mb-2">WebSocket hub. Rooms map to game sessions. History persisted in Cassandra.</p>
               <div class="progress-bar mb-1"><div class="progress-fill bg-purple-400" style="width:55%"></div></div>
               <p class="text-xs text-gray-500">Scale trigger: WS connections &gt; 50k</p>
               <div class="mt-2"><span class="badge badge-blue">WebSocket</span></div>
@@ -1048,61 +834,32 @@ chat-service         :9005
           </div>
         </div>
 
-        <!-- Unity to full stack example -->
         <div>
           <h3 class="font-game text-xs neon-gold mb-3">◈ UNITY → FULL STACK FLOW: JOIN A GAME</h3>
-          <div class="mermaid-wrap" id="flow-diagram" onclick="toggleZoom(this)">
-            <div class="mermaid">
-graph LR
-    U[🎮 Unity Client]
-    GW[API Gateway :443]
-    AS[Auth Service]
-    MS[Matchmaking Service]
-    GS[Game Session Service]
-    IS[Inventory Service]
-    MB[Message Broker NATS]
-    LS[Leaderboard Service]
-
-    U -->|1 POST /auth/login REST| GW
-    GW -->|gRPC| AS
-    AS -->|JWT token| GW
-    GW -->|JWT| U
-    U -->|2 gRPC FindMatch + JWT| GW
-    GW -->|gRPC| MS
-    MS -->|session_id server_ip| U
-    U -->|3 UDP connect| GS
-    GS -->|gRPC GetInventory| IS
-    GS -->|bidi stream snapshots| U
-    GS -->|player.killed event| MB
-    MB -->|consume| LS
-            </div>
+          <div class="diagram-wrap" id="diagram-flow" onclick="this.classList.toggle('zoomed')">
+            <div id="mermaid-flow"></div>
           </div>
-          <p class="text-xs text-gray-500 mt-2 text-center">Click diagram to zoom</p>
+          <p class="text-xs text-gray-500 mt-2 text-center">Click to zoom</p>
         </div>
 
-        <!-- Scaling section -->
         <div>
-          <h3 class="font-game text-xs neon-gold mb-3">◈ HOW THEY SCALE: THE GOLDEN RULES</h3>
+          <h3 class="font-game text-xs neon-gold mb-3">◈ SCALING GOLDEN RULES</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div class="card p-4">
               <h4 class="text-xs font-semibold text-cyan-400 mb-2">📈 Horizontal Scaling</h4>
-              <p class="text-xs text-gray-400 mb-2">Run N copies of a service behind a load balancer. Works when services are <strong class="text-white">stateless</strong>.</p>
-              <p class="text-xs text-gray-500">Auth, Matchmaking, REST APIs → stateless → scale easily</p>
+              <p class="text-xs text-gray-400">Run N copies behind a load balancer. Works only when services are <strong class="text-white">stateless</strong>. Auth, Matchmaking, REST APIs → stateless → scale trivially.</p>
             </div>
             <div class="card p-4">
               <h4 class="text-xs font-semibold text-yellow-400 mb-2">📦 Stateful Services</h4>
-              <p class="text-xs text-gray-400 mb-2">Game sessions are stateful. Each game lives on ONE server. Use <strong class="text-white">consistent hashing</strong> to route players to their session.</p>
-              <p class="text-xs text-gray-500">Game Session Service → sticky routing by game_id</p>
+              <p class="text-xs text-gray-400">Game sessions hold state. Each game lives on ONE instance. Use <strong class="text-white">consistent hashing</strong> to route all players for a game_id to the same pod.</p>
             </div>
             <div class="card p-4">
               <h4 class="text-xs font-semibold text-green-400 mb-2">🗄️ Database Per Service</h4>
-              <p class="text-xs text-gray-400 mb-2">Each microservice owns its data. No shared DB. Communicate via APIs and events only.</p>
-              <p class="text-xs text-gray-500">Inventory: PostgreSQL. Leaderboard: Redis. Chat: Cassandra.</p>
+              <p class="text-xs text-gray-400">Each service owns its data — no shared DB. Share data only via APIs and events. Inventory: PostgreSQL. Leaderboard: Redis. Chat: Cassandra.</p>
             </div>
             <div class="card p-4">
               <h4 class="text-xs font-semibold text-purple-400 mb-2">🔒 Service Mesh</h4>
-              <p class="text-xs text-gray-400 mb-2">In Kubernetes, services talk via a mesh (Istio/Linkerd). mTLS between services, circuit breaking, retries.</p>
-              <p class="text-xs text-gray-500">You don't build this — you configure it.</p>
+              <p class="text-xs text-gray-400">In Kubernetes, an Istio/Linkerd mesh handles mTLS between services, circuit breaking, and retries automatically. You configure it, not build it.</p>
             </div>
           </div>
         </div>
@@ -1111,7 +868,9 @@ graph LR
     </div>
   </div>
 
-  <!-- ═══════════════ TECH TREE ═══════════════ -->
+  <!-- ══════════════════════════════════════════════
+       TECH TREE
+  ══════════════════════════════════════════════ -->
   <div id="section-techtree" class="section-panel">
     <div class="card mb-6">
       <div class="module-header module-header-blue">
@@ -1119,163 +878,66 @@ graph LR
         <h2 class="font-game text-lg neon-blue">MULTIPLAYER ARCHITECT TECH TREE</h2>
       </div>
       <div class="p-6">
-        <p class="text-xs text-gray-400 mb-4 text-center">Your full ascension path from Unity developer to multiplayer architect. Click diagram to zoom.</p>
-        <div class="mermaid-wrap" onclick="toggleZoom(this)">
-          <div class="mermaid">
-graph TD
-    A[🎮 Unity Developer<br/>HTTP + REST]:::start
-
-    A --> B[⚡ Transport Layer]:::zone1
-    B --> B1[TCP — Reliable, ordered]:::blue
-    B --> B2[UDP — Fast, lossy]:::blue
-    B --> B3[WebSocket — Persistent duplex]:::blue
-
-    A --> C[📦 Serialization]:::zone2
-    C --> C1[JSON — Human readable]:::purple
-    C --> C2[Protobuf — Binary, typed]:::purple
-    C2 --> C3[.proto schema → C# codegen]:::purple
-
-    B2 --> D[🔄 Communication Patterns]:::zone3
-    C2 --> D
-    D --> D1[REST — Request/Response]:::green
-    D --> D2[Pub/Sub — Event-driven]:::green
-    D --> D3[gRPC — Typed RPC + streams]:::green
-    D3 --> D4[Unary, Server Stream, Bidi]:::green
-
-    D --> E[🏗️ Microservices]:::zone4
-    E --> E1[Auth Service — JWT]:::gold
-    E --> E2[Matchmaking Service]:::gold
-    E --> E3[Game Session Service]:::gold
-    E --> E4[Inventory Service]:::gold
-    E --> E5[Leaderboard Service]:::gold
-
-    E --> F[☁️ Infrastructure]:::final
-    F --> F1[Kubernetes + Helm]:::final
-    F --> F2[Service Mesh — Istio]:::final
-    F --> F3[Message Broker — NATS/Kafka]:::final
-    F --> F4[API Gateway — Kong/Envoy]:::final
-
-    classDef start fill:#1a3a5c,stroke:#00d4ff,color:#00d4ff
-    classDef zone1 fill:#0d2a3a,stroke:#00d4ff,color:#00d4ff
-    classDef zone2 fill:#1a0d2e,stroke:#b94fff,color:#b94fff
-    classDef zone3 fill:#0d2e1a,stroke:#00ff88,color:#00ff88
-    classDef zone4 fill:#2e2800,stroke:#ffd700,color:#ffd700
-    classDef blue fill:#0a1e2a,stroke:#00d4ff,color:#7ec8e3
-    classDef purple fill:#160a24,stroke:#b94fff,color:#c78dff
-    classDef green fill:#0a1e12,stroke:#00ff88,color:#7effc2
-    classDef gold fill:#1e1800,stroke:#ffd700,color:#ffd770
-    classDef final fill:#0f0f0f,stroke:#9ca3af,color:#9ca3af
-          </div>
+        <p class="text-xs text-gray-400 mb-4 text-center">Full ascension path. Click diagram to zoom.</p>
+        <div class="diagram-wrap" id="diagram-tree" onclick="this.classList.toggle('zoomed')">
+          <div id="mermaid-tree"></div>
         </div>
-        <p class="text-xs text-gray-500 mt-2 text-center">Click diagram to zoom</p>
+        <p class="text-xs text-gray-500 mt-2 text-center">Click to zoom</p>
       </div>
     </div>
   </div>
 
-  <!-- ═══════════════ LOOT TABLE ═══════════════ -->
+  <!-- ══════════════════════════════════════════════
+       LOOT TABLE
+  ══════════════════════════════════════════════ -->
   <div id="section-loot" class="section-panel">
     <div class="card mb-6">
       <div class="module-header module-header-purple">
         <span class="text-2xl">💎</span>
-        <h2 class="font-game text-lg neon-purple">LOOT TABLE — KEY CONCEPTS</h2>
+        <h2 class="font-game text-lg neon-purple">LOOT TABLE — KEY CONCEPTS BY RARITY</h2>
       </div>
       <div class="p-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-
-          <!-- Legendary -->
           <div class="card card-gold p-4">
-            <div class="flex items-center gap-2 mb-3">
-              <span class="text-lg">⭐⭐⭐⭐⭐</span>
-              <span class="font-game text-xs rarity-legendary">LEGENDARY</span>
-            </div>
+            <div class="flex items-center gap-2 mb-3"><span>⭐⭐⭐⭐⭐</span><span class="font-game text-xs rarity-legendary">LEGENDARY</span></div>
             <div class="space-y-2">
-              <div class="flex items-start gap-2 text-xs">
-                <span class="text-yellow-400 mt-0.5">◆</span>
-                <div><span class="text-white font-medium">UDP + Dead Reckoning</span> — The secret sauce of all AAA multiplayer games. Predict movement client-side, reconcile with server.</div>
-              </div>
-              <div class="flex items-start gap-2 text-xs">
-                <span class="text-yellow-400 mt-0.5">◆</span>
-                <div><span class="text-white font-medium">Authoritative Server Model</span> — Server is the source of truth. Clients send inputs, not positions. Prevents cheating.</div>
-              </div>
-              <div class="flex items-start gap-2 text-xs">
-                <span class="text-yellow-400 mt-0.5">◆</span>
-                <div><span class="text-white font-medium">Protobuf Field Numbers</span> — Never reuse a deleted field number. Ever. Backward-compatibility of your wire format depends on it.</div>
-              </div>
+              <div class="flex items-start gap-2 text-xs"><span class="text-yellow-400 mt-0.5">◆</span><div><span class="text-white font-medium">UDP + Dead Reckoning</span> — Secret sauce of all AAA multiplayer. Predict movement client-side, reconcile with server truth.</div></div>
+              <div class="flex items-start gap-2 text-xs"><span class="text-yellow-400 mt-0.5">◆</span><div><span class="text-white font-medium">Authoritative Server Model</span> — Server is the source of truth. Clients send inputs, not positions. Prevents cheating by design.</div></div>
+              <div class="flex items-start gap-2 text-xs"><span class="text-yellow-400 mt-0.5">◆</span><div><span class="text-white font-medium">Protobuf Field Number Immutability</span> — Never reuse a deleted field number. Backward-compatibility of your wire format depends on it.</div></div>
             </div>
           </div>
-
-          <!-- Epic -->
           <div class="card card-purple p-4">
-            <div class="flex items-center gap-2 mb-3">
-              <span class="text-lg">⭐⭐⭐⭐</span>
-              <span class="font-game text-xs rarity-epic">EPIC</span>
-            </div>
+            <div class="flex items-center gap-2 mb-3"><span>⭐⭐⭐⭐</span><span class="font-game text-xs rarity-epic">EPIC</span></div>
             <div class="space-y-2">
-              <div class="flex items-start gap-2 text-xs">
-                <span class="text-purple-400 mt-0.5">◆</span>
-                <div><span class="text-white font-medium">gRPC Bidirectional Streaming</span> — Single long-lived connection that streams both ways. Better than WebSocket for typed game channels.</div>
-              </div>
-              <div class="flex items-start gap-2 text-xs">
-                <span class="text-purple-400 mt-0.5">◆</span>
-                <div><span class="text-white font-medium">Redis Sorted Sets for Leaderboards</span> — ZADD is O(log N). Getting top 100 players is instant regardless of player count.</div>
-              </div>
-              <div class="flex items-start gap-2 text-xs">
-                <span class="text-purple-400 mt-0.5">◆</span>
-                <div><span class="text-white font-medium">Database-per-Service Pattern</span> — Never share a database between microservices. Use APIs and events to share data.</div>
-              </div>
+              <div class="flex items-start gap-2 text-xs"><span class="text-purple-400 mt-0.5">◆</span><div><span class="text-white font-medium">gRPC Bidi Streaming</span> — Single long-lived connection, full-duplex. Better than WebSocket for typed, high-frequency game channels.</div></div>
+              <div class="flex items-start gap-2 text-xs"><span class="text-purple-400 mt-0.5">◆</span><div><span class="text-white font-medium">Redis Sorted Sets for Leaderboards</span> — ZADD is O(log N). Getting top 100 players is instant regardless of total player count.</div></div>
+              <div class="flex items-start gap-2 text-xs"><span class="text-purple-400 mt-0.5">◆</span><div><span class="text-white font-medium">Database-per-Service Pattern</span> — Never share a database between microservices. APIs and events only.</div></div>
             </div>
           </div>
-
-          <!-- Rare -->
           <div class="card p-4">
-            <div class="flex items-center gap-2 mb-3">
-              <span class="text-lg">⭐⭐⭐</span>
-              <span class="font-game text-xs rarity-rare">RARE</span>
-            </div>
+            <div class="flex items-center gap-2 mb-3"><span>⭐⭐⭐</span><span class="font-game text-xs rarity-rare">RARE</span></div>
             <div class="space-y-2">
-              <div class="flex items-start gap-2 text-xs">
-                <span class="text-cyan-400 mt-0.5">◆</span>
-                <div><span class="text-white font-medium">Head-of-Line Blocking</span> — Why TCP is bad for game physics. One dropped packet stalls the stream.</div>
-              </div>
-              <div class="flex items-start gap-2 text-xs">
-                <span class="text-cyan-400 mt-0.5">◆</span>
-                <div><span class="text-white font-medium">varint encoding</span> — How Protobuf stores small integers in 1 byte instead of 4. Key to tiny payload sizes.</div>
-              </div>
-              <div class="flex items-start gap-2 text-xs">
-                <span class="text-cyan-400 mt-0.5">◆</span>
-                <div><span class="text-white font-medium">Circuit Breaker Pattern</span> — If Matchmaking is slow, fail fast instead of cascading timeouts to all clients.</div>
-              </div>
+              <div class="flex items-start gap-2 text-xs"><span class="text-cyan-400 mt-0.5">◆</span><div><span class="text-white font-medium">Head-of-Line Blocking</span> — Why TCP is fatal for game physics. One dropped packet freezes the entire stream.</div></div>
+              <div class="flex items-start gap-2 text-xs"><span class="text-cyan-400 mt-0.5">◆</span><div><span class="text-white font-medium">varint encoding</span> — How Protobuf stores small integers in 1 byte instead of 4. Core to tiny payload sizes.</div></div>
+              <div class="flex items-start gap-2 text-xs"><span class="text-cyan-400 mt-0.5">◆</span><div><span class="text-white font-medium">Circuit Breaker Pattern</span> — If Matchmaking is overloaded, fail fast instead of cascading timeouts across all clients.</div></div>
             </div>
           </div>
-
-          <!-- Common -->
           <div class="card p-4">
-            <div class="flex items-center gap-2 mb-3">
-              <span class="text-lg">⭐⭐</span>
-              <span class="font-game text-xs rarity-common">COMMON</span>
-            </div>
+            <div class="flex items-center gap-2 mb-3"><span>⭐⭐</span><span class="font-game text-xs rarity-common">COMMON</span></div>
             <div class="space-y-2">
-              <div class="flex items-start gap-2 text-xs">
-                <span class="text-gray-400 mt-0.5">◆</span>
-                <div><span class="text-white font-medium">JWT (JSON Web Tokens)</span> — Stateless auth. Server signs a token; any service can validate it without a DB lookup.</div>
-              </div>
-              <div class="flex items-start gap-2 text-xs">
-                <span class="text-gray-400 mt-0.5">◆</span>
-                <div><span class="text-white font-medium">API Gateway</span> — Single entry point for all clients. Handles auth, rate limiting, routing to microservices.</div>
-              </div>
-              <div class="flex items-start gap-2 text-xs">
-                <span class="text-gray-400 mt-0.5">◆</span>
-                <div><span class="text-white font-medium">Health Checks</span> — Every service exposes /health. Kubernetes uses this to restart crashed pods automatically.</div>
-              </div>
+              <div class="flex items-start gap-2 text-xs"><span class="text-gray-400 mt-0.5">◆</span><div><span class="text-white font-medium">JWT (JSON Web Tokens)</span> — Stateless auth. Server signs a token; any service validates it without a DB lookup.</div></div>
+              <div class="flex items-start gap-2 text-xs"><span class="text-gray-400 mt-0.5">◆</span><div><span class="text-white font-medium">API Gateway</span> — Single entry point for all clients. Handles auth, rate limiting, routing to microservices.</div></div>
+              <div class="flex items-start gap-2 text-xs"><span class="text-gray-400 mt-0.5">◆</span><div><span class="text-white font-medium">Health Checks</span> — Every service exposes <code class="text-green-400">/health</code>. Kubernetes uses this to restart crashed pods automatically.</div></div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ═══════════════ ORACLE ═══════════════ -->
+  <!-- ══════════════════════════════════════════════
+       ORACLE
+  ══════════════════════════════════════════════ -->
   <div id="section-oracle" class="section-panel">
     <div class="card mb-6">
       <div class="module-header module-header-green">
@@ -1283,44 +945,38 @@ graph TD
         <h2 class="font-game text-lg neon-green">THE ORACLE — PLAIN ENGLISH ANALOGIES</h2>
       </div>
       <div class="p-6 space-y-4">
-
         <div class="card p-4">
           <h3 class="font-game text-xs neon-blue mb-2">⚡ TCP vs UDP — The Pizza Delivery</h3>
-          <p class="text-xs text-gray-300"><strong class="text-cyan-300">TCP</strong> is a pizza delivery with signature required. If you're not home (packet lost), the driver waits, and ALL other deliveries on that truck WAIT too. Perfect for your wallet (bank transactions). Terrible for a live sports broadcast.</p>
-          <p class="text-xs text-gray-300 mt-2"><strong class="text-cyan-300">UDP</strong> is your TV signal. If one frame drops, your TV doesn't freeze waiting for it — it just shows the next frame. A slightly glitchy game > a frozen one.</p>
+          <p class="text-xs text-gray-300"><strong class="text-cyan-300">TCP</strong> is delivery with signature required. If you're not home (packet lost), the driver waits — and every other delivery on that truck waits too. Perfect for bank transactions. Catastrophic for a live game at 60 FPS.</p>
+          <p class="text-xs text-gray-300 mt-2"><strong class="text-cyan-300">UDP</strong> is your TV signal. A dropped frame? The TV shows the next frame anyway. A slightly glitchy game is better than a frozen one.</p>
         </div>
-
         <div class="card card-purple p-4">
           <h3 class="font-game text-xs neon-purple mb-2">📦 Protobuf vs JSON — Spoken Language vs Morse Code</h3>
-          <p class="text-xs text-gray-300"><strong class="text-purple-300">JSON</strong> is texting in full English sentences: <em>"Hey, my name is player number 42 and I'm at position X equals 123.456..."</em> — readable, but wordy.</p>
-          <p class="text-xs text-gray-300 mt-2"><strong class="text-purple-300">Protobuf</strong> is Morse code agreed in advance: both sides have a codebook (the .proto file) so "· — · ·" means "field 3 is a float" with no extra context bytes needed. Tiny and blazing fast to decode.</p>
+          <p class="text-xs text-gray-300"><strong class="text-purple-300">JSON</strong> is texting in full sentences: "Hey, my name is Player 42 and I'm at position X equals 123.456…" — readable, but verbose on every single message.</p>
+          <p class="text-xs text-gray-300 mt-2"><strong class="text-purple-300">Protobuf</strong> is Morse code with a shared codebook (the .proto file). Both sides already know "·—·" means "field 3 is a float". No extra context bytes. Tiny and blazing fast to decode.</p>
         </div>
-
         <div class="card card-green p-4">
           <h3 class="font-game text-xs neon-green mb-2">🔄 REST vs Pub/Sub vs gRPC — Types of Communication</h3>
-          <p class="text-xs text-gray-300"><strong class="text-green-300">REST</strong> = making a phone call. You dial, they answer, conversation over. Great for one-off questions.</p>
-          <p class="text-xs text-gray-300 mt-2"><strong class="text-green-300">Pub/Sub</strong> = a radio broadcast. The DJ (publisher) talks; anyone tuned in (subscriber) hears it. The DJ doesn't know who's listening. Perfect for "player died" events.</p>
-          <p class="text-xs text-gray-300 mt-2"><strong class="text-green-300">gRPC</strong> = a walkie-talkie with a shared channel. Both sides can talk at any time (bidi stream), it's fast (binary), and you have a "channel protocol" so nobody sends garbage.</p>
+          <p class="text-xs text-gray-300"><strong class="text-green-300">REST</strong> = making a phone call. You dial, they answer, call ends. One-off questions.</p>
+          <p class="text-xs text-gray-300 mt-2"><strong class="text-green-300">Pub/Sub</strong> = a radio broadcast. The DJ (publisher) talks; anyone tuned in (subscriber) hears. The DJ doesn't know who's listening — perfect for "player killed" events that 3 different services care about.</p>
+          <p class="text-xs text-gray-300 mt-2"><strong class="text-green-300">gRPC</strong> = a walkie-talkie on a shared secure channel. Both sides can talk at any time (bidi stream), everything is binary and typed — no garbage in, no garbage out.</p>
         </div>
-
         <div class="card card-gold p-4">
           <h3 class="font-game text-xs neon-gold mb-2">🏗️ Microservices — A Restaurant Kitchen</h3>
-          <p class="text-xs text-gray-300">A <strong class="text-yellow-300">monolith</strong> is one chef doing everything: takes orders, cooks, plates, washes dishes, manages the register. If they get sick, the restaurant closes.</p>
-          <p class="text-xs text-gray-300 mt-2"><strong class="text-yellow-300">Microservices</strong> are a proper kitchen brigade. The grill chef (Game Session Service) doesn't care what the pastry chef (Leaderboard Service) is doing. If the dishwasher calls in sick, you still serve food. You hire 3 more grill chefs on Friday night (horizontal scaling) without touching any other station.</p>
+          <p class="text-xs text-gray-300">A <strong class="text-yellow-300">monolith</strong> is one chef doing everything: orders, cooking, plating, dishes, register. That chef gets sick — restaurant closes.</p>
+          <p class="text-xs text-gray-300 mt-2"><strong class="text-yellow-300">Microservices</strong> are a proper kitchen brigade. The grill chef (Game Session Service) doesn't care what the pastry chef (Leaderboard Service) is doing. Dishwasher calls in sick? You still serve food. On Friday night you hire 3 more grill chefs (horizontal scaling) without touching any other station.</p>
           <p class="text-xs text-gray-300 mt-2">The <strong class="text-yellow-300">head waiter</strong> is your API Gateway — single point of contact for all guests (clients).</p>
         </div>
-
         <div class="card p-4">
-          <h3 class="font-game text-xs neon-blue mb-2">⭐ Authoritative Server — The Referee Analogy</h3>
-          <p class="text-xs text-gray-300">In a naive setup, players shout "I shot him! I moved here!" and the server trusts them. That's how cheaters win.</p>
-          <p class="text-xs text-gray-300 mt-2">With an <strong class="text-cyan-300">authoritative server</strong>, players only send <em>inputs</em> ("I pressed W and Space at tick 1042"). The server runs the simulation and shouts back "Here's where you are." Players can predict their own movement (client-side prediction), but the server's word is final. Cheating becomes pointless because your client never controls the ground truth.</p>
+          <h3 class="font-game text-xs neon-blue mb-2">⭐ Authoritative Server — The Referee</h3>
+          <p class="text-xs text-gray-300">Naively, players shout "I shot him! I'm here!" and the server trusts them. That's how cheaters win.</p>
+          <p class="text-xs text-gray-300 mt-2">With an <strong class="text-cyan-300">authoritative server</strong>, players only send <em>inputs</em>: "I pressed W and Space at tick 1042." The server runs the physics simulation and broadcasts back the definitive world state. Client-side prediction keeps it feeling responsive, but the server's word is final. Cheating is pointless because your client never controls the ground truth.</p>
         </div>
-
       </div>
     </div>
   </div>
 
-  <!-- ═══════════════ FOOTER ═══════════════ -->
+  <!-- FOOTER -->
   <div class="text-center mt-10 pb-8">
     <div class="card inline-block px-8 py-4">
       <p class="font-game text-xs neon-blue mb-1">MULTIPLAYER ARCHITECT SKILL TREE</p>
@@ -1337,60 +993,132 @@ graph TD
 </div>
 
 <script>
-  // Initialize Mermaid
-  mermaid.initialize({
-    startOnLoad: true,
-    theme: 'dark',
-    themeVariables: {
-      background: '#050a14',
-      mainBkg: '#0d1b2a',
-      nodeBorder: '#00d4ff',
-      clusterBkg: '#0d1b2a',
-      titleColor: '#00d4ff',
-      edgeLabelBackground: '#0d1b2a',
-      lineColor: '#00d4ff',
-      primaryColor: '#0d1b2a',
-      primaryTextColor: '#c8d8e8',
-      primaryBorderColor: '#00d4ff',
-      secondaryColor: '#1a0d2e',
-      tertiaryColor: '#0a1628'
-    },
-    flowchart: { htmlLabels: true, curve: 'basis' }
-  });
+// ── Highlight.js ──────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
+});
 
-  // Section navigation
-  function showSection(id, btn) {
-    document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById('section-' + id).classList.add('active');
-    btn.classList.add('active');
-    // Re-render mermaid if needed
-    setTimeout(() => mermaid.run(), 100);
+// ── Mermaid ───────────────────────────────────────────────
+mermaid.initialize({
+  startOnLoad: false,
+  theme: 'dark',
+  themeVariables: {
+    background:          '#010d1a',
+    mainBkg:             '#0d1b2a',
+    nodeBorder:          '#00d4ff',
+    clusterBkg:          '#0d1b2a',
+    titleColor:          '#00d4ff',
+    edgeLabelBackground: '#0d1b2a',
+    lineColor:           '#00d4ff',
+    primaryColor:        '#0d1b2a',
+    primaryTextColor:    '#c8d8e8',
+    primaryBorderColor:  '#00d4ff',
+    secondaryColor:      '#1a0d2e',
+    tertiaryColor:       '#0a1628'
+  },
+  flowchart: { htmlLabels: false, curve: 'basis' }
+});
+
+const FLOW_DEF = `
+graph LR
+    U[Unity Client]
+    GW[API Gateway :443]
+    AS[Auth Service]
+    MS[Matchmaking Service]
+    GS[Game Session Service]
+    IS[Inventory Service]
+    MB[Message Broker NATS]
+    LS[Leaderboard Service]
+
+    U -->|1 POST /auth/login| GW
+    GW -->|gRPC| AS
+    AS -->|JWT| GW
+    GW -->|JWT| U
+    U -->|2 gRPC FindMatch + JWT| GW
+    GW -->|gRPC| MS
+    MS -->|session_id + server_ip| U
+    U -->|3 UDP connect| GS
+    GS -->|gRPC GetInventory| IS
+    GS -->|bidi stream snapshots| U
+    GS -->|player.killed event| MB
+    MB -->|consume| LS
+`;
+
+const TREE_DEF = `
+graph TD
+    A[Unity Developer - HTTP and REST]
+
+    A --> B[Transport Layer]
+    B --> B1[TCP - Reliable ordered]
+    B --> B2[UDP - Fast lossy]
+    B --> B3[WebSocket - Persistent duplex]
+
+    A --> C[Serialization]
+    C --> C1[JSON - Human readable]
+    C --> C2[Protobuf - Binary typed]
+    C2 --> C3[proto schema to C# codegen]
+
+    B2 --> D[Communication Patterns]
+    C2 --> D
+    D --> D1[REST - Request Response]
+    D --> D2[PubSub - Event driven]
+    D --> D3[gRPC - Typed RPC and streams]
+    D3 --> D4[Unary - ServerStream - Bidi]
+
+    D --> E[Microservices]
+    E --> E1[Auth Service - JWT]
+    E --> E2[Matchmaking Service]
+    E --> E3[Game Session Service]
+    E --> E4[Inventory Service]
+    E --> E5[Leaderboard Service]
+
+    E --> F[Infrastructure]
+    F --> F1[Kubernetes and Helm]
+    F --> F2[Service Mesh Istio]
+    F --> F3[Message Broker NATS Kafka]
+    F --> F4[API Gateway Kong Envoy]
+`;
+
+let flowRendered = false;
+let treeRendered = false;
+
+async function renderDiagram(defText, containerId, flag) {
+  try {
+    const { svg } = await mermaid.render('svg-' + containerId, defText);
+    document.getElementById(containerId).innerHTML = svg;
+  } catch(e) {
+    document.getElementById(containerId).innerHTML =
+      '<p class="text-red-400 text-xs p-4">Diagram render error: ' + e.message + '</p>';
   }
+}
 
-  // Zoom toggle for mermaid diagrams
-  function toggleZoom(el) {
-    el.classList.toggle('zoomed');
+// Section navigation
+function showSection(id, btn) {
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  btn.classList.add('active');
+
+  if (id === 'architecture' && !flowRendered) {
+    flowRendered = true;
+    renderDiagram(FLOW_DEF, 'mermaid-flow');
   }
+  if (id === 'techtree' && !treeRendered) {
+    treeRendered = true;
+    renderDiagram(TREE_DEF, 'mermaid-tree');
+  }
+}
 
-  // Animate progress bars on load
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      document.querySelectorAll('.progress-fill').forEach(bar => {
-        const w = bar.style.width;
-        bar.style.width = '0%';
-        setTimeout(() => bar.style.width = w, 100);
-      });
-    }, 300);
-  });
-
-  // Skill node tooltips via title
-  document.querySelectorAll('.skill-node').forEach(node => {
-    node.addEventListener('click', function() {
-      this.style.filter = 'brightness(1.5)';
-      setTimeout(() => this.style.filter = '', 400);
+// Animate progress bars
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.querySelectorAll('.progress-fill').forEach(bar => {
+      const w = bar.style.width;
+      bar.style.width = '0%';
+      setTimeout(() => bar.style.width = w, 100);
     });
-  });
+  }, 300);
+});
 </script>
 </body>
 </html>
